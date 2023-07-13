@@ -6,6 +6,8 @@
       - docker_network_name is defined
       - cloudwatch_region is defined
       - cloudwatch_log_group is defined
+      - lidarr_downloads_folder is defined
+      - lidarr_music_folder is defined
       - backup_day is defined
 
 - name: Create the dockernetwork
@@ -35,6 +37,8 @@
       - 8686:8686
     volumes:
       - "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/config:/config"
+      - "{{ lidarr_downloads_folder }}:/downloads"
+      - "{{ lidarr_music_folder }}:/music"
     env:
       PUID: "1000"
       PGID: "1000"

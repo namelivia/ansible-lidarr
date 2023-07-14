@@ -6,9 +6,11 @@
       - docker_network_name is defined
       - cloudwatch_region is defined
       - cloudwatch_log_group is defined
-      - lidarr_downloads_folder is defined
-      - lidarr_music_folder is defined
       - backup_day is defined
+      - user is defined
+      - group is defined
+      - uid is defined
+      - gid is defined
 
 - name: Create the dockernetwork
   docker_network:
@@ -19,6 +21,24 @@
     path: "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/config"
     state: directory
     mode: 0755
+    owner: "{{ user }}"
+    group: "{{ group }}"
+
+- name: Create the music directory
+  file:
+    path: "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/music"
+    state: directory
+    mode: 0755
+    owner: "{{ user }}"
+    group: "{{ group }}"
+
+- name: Create the downloads directory
+  file:
+    path: "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/downloads"
+    state: directory
+    mode: 0755
+    owner: "{{ user }}"
+    group: "{{ group }}"
 
 - name: Create app container
   docker_container:
@@ -37,9 +57,9 @@
       - 8686:8686
     volumes:
       - "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/config:/config"
-      - "{{ lidarr_downloads_folder }}:/downloads"
-      - "{{ lidarr_music_folder }}:/music"
+      - "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/config:/downloads"
+      - "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/config:/music"
     env:
-      PUID: "1001"
-      PGID: "1001"
+      PUID: "{{uid}}"
+      PGID: "{{gid}}"
       TZ: "Europe/Madrid"

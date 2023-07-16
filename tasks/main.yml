@@ -16,9 +16,17 @@
   docker_network:
     name: "{{ docker_network_name }}"
 
+- name: Create the files directory
+  file:
+    path: "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/files"
+    state: directory
+    mode: 0755
+    owner: "{{ user }}"
+    group: "{{ group }}"
+
 - name: Create the config directory
   file:
-    path: "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/config"
+    path: "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/files/config"
     state: directory
     mode: 0755
     owner: "{{ user }}"
@@ -26,7 +34,7 @@
 
 - name: Create the music directory
   file:
-    path: "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/music"
+    path: "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/files/music"
     state: directory
     mode: 0755
     owner: "{{ user }}"
@@ -34,7 +42,7 @@
 
 - name: Create the downloads directory
   file:
-    path: "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/downloads"
+    path: "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/files/downloads"
     state: directory
     mode: 0755
     owner: "{{ user }}"
@@ -56,9 +64,9 @@
     ports:
       - 8686:8686
     volumes:
-      - "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/config:/config"
-      - "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/config:/downloads"
-      - "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/config:/music"
+      - "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/files/config:/config"
+      - "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/files/downloads:/downloads"
+      - "{{ hostvars[inventory_hostname].working_directory }}{{ application_name }}/files/music:/music"
     env:
       PUID: "{{uid}}"
       PGID: "{{gid}}"

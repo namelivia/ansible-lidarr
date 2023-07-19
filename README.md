@@ -13,8 +13,7 @@ roles:
 ```
 
 ## Required variables
- - `cloudwatch_region` Cloudwatch region to send the logs to.
- - `cloudwatch_log_group` Cloudwatch log group to send the logs to.
+ - `loki_url` Loki endpoint to send logs.
  - `lidarr_downloads_folder` Folder path to place downloads in.
  - `lidarr_music_folder` Folder path to place series in.
  - `backup_day` Day of the week in which the config will be backed up.
